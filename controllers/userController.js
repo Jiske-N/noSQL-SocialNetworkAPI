@@ -93,4 +93,28 @@ module.exports = {
             res.status(500).json(err);
         }
     },
+
+    // Add a new friend to users friend list
+    async addFriend(req, res) {
+        try {
+            const user = await User.findOneAndUpdate(
+                {
+                    _id: req.params.userId,
+                },
+                { $addToSet: { friends: req.params.friendId } },
+                // make the updated user return rather than the original
+                { new: true }
+            );
+
+            if (!user) {
+                return res
+                    .status(404)
+                    .json({ message: "No user with that ID" });
+            }
+
+            res.json(user);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
 };
