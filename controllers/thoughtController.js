@@ -115,10 +115,9 @@ module.exports = {
         }
     },
 
-    // Create a new reaction
+    // Create a new reaction in a thoughts reaction array
     async addReaction(req, res) {
         try {
-            // const reaction = await Reaction.create(req.body);
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $addToSet: { reactions: req.body } },
@@ -132,6 +131,26 @@ module.exports = {
                 });
             }
             res.json(thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    // Delete a reaction in a thoughts reaction array by reaction Id
+    async removeReaction(req, res) {
+        try {
+            const thought = await Thought.findOneAndUpdate(
+                { _id: req.params.thoughtId },
+                { $pull: { reactions: { reactionId: req.params.reactionId } } },
+                { new: true }
+            );
+
+            if (!thought) {
+                return res.status(404).json({
+                    message: "No thought with that ID",
+                });
+            }
+            res.json({ message: "Reaction to thought deleted!" });
         } catch (err) {
             res.status(500).json(err);
         }
