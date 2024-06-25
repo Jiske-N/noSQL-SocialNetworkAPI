@@ -37,7 +37,7 @@ const userSchema = new Schema(
         toJSON: {
             // I'm not sure if we're supposed to have these as true or false
             virtuals: true,
-            getters: true,
+            // getters: true,
         },
         // stopped an id being generated as it's input already by the post request
         id: false,

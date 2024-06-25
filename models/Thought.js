@@ -1,29 +1,37 @@
 const mongoose = require("mongoose");
-const { Schema, model, SchemaType } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const dayjs = require("dayjs");
 
 // schema to create the reation subdocument within the thoughtSchema below
-const reactionSchema = new Schema({
-    reactionId: {
-        type: mongoose.Types.ObjectId,
-        default: new mongoose.Types.ObjectId(),
+const reactionSchema = new Schema(
+    {
+        reactionId: {
+            type: mongoose.Types.ObjectId,
+            default: new mongoose.Types.ObjectId(),
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            maxlength: 280,
+        },
+        username: {
+            type: String,
+            required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+            get: () => dayjs().format("DD/MM/YYYY, HH:mm:ss"),
+        },
     },
-    reactionBody: {
-        type: String,
-        required: true,
-        maxlength: 280,
-    },
-    username: {
-        type: String,
-        required: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    // stopped an id being generated as it's already defined above
-    // {    id: false},
-});
+    {
+        toJSON: {
+            getters: true,
+        },
+        // stopped an id being generated as it's already defined above
+        id: false,
+    }
+);
 
 // schema to create the thought model
 // parent to the reactionSchema above
@@ -38,6 +46,7 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
+            get: () => dayjs().format("DD/MM/YYYY, HH:mm:ss"),
         },
         username: [
             {
@@ -59,10 +68,10 @@ const thoughtSchema = new Schema(
     }
 );
 
-// format the createdAt timestamp
-thoughtSchema.virtual("formatCreatedAt").get(function () {
-    return dayjs(this.createdAt).format("DD/MM/YYYY, HH:mm:ss");
-});
+// // format the createdAt timestamp
+// thoughtSchema.virtual("formatCreatedAt").get(function () {
+//     return dayjs(this.createdAt).format("DD/MM/YYYY, HH:mm:ss");
+// });
 
 // create a virtual that retrieves the reactions array.length
 thoughtSchema.virtual("reactionCount").get(function () {
