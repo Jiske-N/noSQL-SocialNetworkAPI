@@ -26,3 +26,18 @@
 // * `POST` to create a reaction stored in a single thought's `reactions` array field
 
 // * `DELETE` to pull and remove a reaction by the reaction's `reactionId` value
+
+const router = require("express").Router();
+const {
+    getThoughts,
+    // getSingleUser,
+    createThought,
+} = require("../../controllers/thoughtController");
+
+// /api/users
+router.route("/").get(getThoughts).post(createThought);
+
+// /api/users/:userId
+// router.route("/:userId").get(getSingleUser);
+
+module.exports = router;

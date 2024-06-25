@@ -26,3 +26,25 @@
 // * `POST` to create a reaction stored in a single thought's `reactions` array field
 
 // * `DELETE` to pull and remove a reaction by the reaction's `reactionId` value
+
+const { Thought } = require("../models");
+
+module.exports = {
+    async getThoughts(req, res) {
+        try {
+            const thoughts = await Thought.find();
+            res.status(200).json(thoughts);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    async createThought(req, res) {
+        try {
+            const Thought = await Thought.create(req.body);
+            res.status(200).json(Thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+};
