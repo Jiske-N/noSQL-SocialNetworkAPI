@@ -1,7 +1,3 @@
-// * `PUT` to update a thought by its `_id`
-
-// * `DELETE` to remove a thought by its `_id`
-
 // ---
 
 // **`/api/thoughts/:thoughtId/reactions`**
@@ -80,6 +76,40 @@ module.exports = {
                 });
             }
             res.json(thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    // Delete a single thought by Id
+    async deleteThought(req, res) {
+        try {
+            const thought = await Thought.findOneAndDelete({
+                _id: req.params.thoughtId,
+            });
+
+            if (!thought) {
+                return res.status(404).json({
+                    message: "No thought with that ID",
+                });
+            }
+
+            const user = await User.findOneAndUpdate(
+                { username: thought.username },
+                { $pull: { thoughts: req.params.thoughtId } },
+                { new: true }
+            );
+
+            if (!user) {
+                return res.status(404).json({
+                    message:
+                        "Thought deleted but no user with that thought found",
+                });
+            }
+
+            res.json({
+                message: "Thought deleted and removed from users thoughts!",
+            });
         } catch (err) {
             res.status(500).json(err);
         }
