@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Thought } = require("../models");
 
 // **`/api/users`**
 
@@ -15,58 +15,46 @@ const { User } = require("../models");
 // ---
 
 module.exports = {
-    // * `GET` all users
     // Get all users
     async getUsers(req, res) {
         try {
             const users = await User.find();
-            res.status(200).json(users);
+            res.json(users);
         } catch (err) {
             res.status(500).json(err);
         }
     },
-    // * `GET` a single user by its `_id` and populated thought and friend data
-    // Get a single user
-    // async getSingleUser(req, res) {
-    //     try {
-    //         const user = await User.findOne({ _id: req.params.userId }).select(
-    //             "-__v"
-    //         );
 
-    //         if (!user) {
-    //             return res
-    //                 .status(404)
-    //                 .json({ message: "No user with that ID" });
-    //         }
+    // Get a single user and include thoughts and friends
+    async getSingleUser(req, res) {
+        try {
+            const user = await User.findOne({
+                _id: req.params.userId,
+            }).populate(["thoughts", "friends"]);
 
-    //         res.json(user);
-    //     } catch (err) {
-    //         res.status(500).json(err);
-    //     }
-    // },
-    // * `POST` a new user:
+            if (!user) {
+                return res
+                    .status(404)
+                    .json({ message: "No user with that ID" });
+            }
 
-    // ```json
-    // // example data
-    // {
-    //   "username": "lernantino",
-    //   "email": "lernantino@gmail.com"
-    // }
-    // ```
+            res.json(user);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
     // create a new user
     async createUser(req, res) {
         try {
             const user = await User.create(req.body);
-            res.status(200).json(user);
+            res.json(user);
         } catch (err) {
             res.status(500).json(err);
         }
     },
 
-    // * `DELETE` to remove user by its `_id`
-
-    // **BONUS**: Remove a user's associated thoughts when deleted.
-    // Delete a user and associated apps
+    // Delete a user and associated thoughts
     async deleteUser(req, res) {
         try {
             const user = await User.findOneAndDelete({
@@ -79,8 +67,8 @@ module.exports = {
                     .json({ message: "No user with that ID" });
             }
 
-            // await Application.deleteMany({ _id: { $in: user.applications } });
-            res.json({ message: "User deleted!" });
+            await Thought.deleteMany({ _id: { $in: user.thoughts } });
+            res.json({ message: "User and associated thoughts deleted!" });
         } catch (err) {
             res.status(500).json(err);
         }
