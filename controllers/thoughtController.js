@@ -41,6 +41,25 @@ module.exports = {
         }
     },
 
+    // Get a single thought by Id
+    async getSingleThought(req, res) {
+        try {
+            const thought = await Thought.findOne({
+                _id: req.params.thoughtId,
+            }).populate(["reactions"]);
+
+            if (!thought) {
+                return res
+                    .status(404)
+                    .json({ message: "No thought with that ID" });
+            }
+
+            res.json(thought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
     // Create a new thought
     async createThought(req, res) {
         try {

@@ -21,7 +21,7 @@ module.exports = {
         }
     },
 
-    // Get a single user and include thoughts and friends
+    // Get a single user by Id and include thoughts and friends
     async getSingleUser(req, res) {
         try {
             const user = await User.findOne({
