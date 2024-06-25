@@ -21,6 +21,8 @@ const reactionSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    // stopped an id being generated as it's already defined above
+    // {    id: false},
 });
 
 // schema to create the thought model
@@ -52,6 +54,8 @@ const thoughtSchema = new Schema(
             virtuals: true,
             getters: true,
         },
+        // stopped an id being generated as it's input already by the post request
+        id: false,
     }
 );
 

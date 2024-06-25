@@ -39,6 +39,8 @@ const userSchema = new Schema(
             virtuals: true,
             getters: true,
         },
+        // stopped an id being generated as it's input already by the post request
+        id: false,
     }
 );
 
