@@ -17,7 +17,7 @@ const userSchema = new Schema(
                 validator: function (v) {
                     return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v);
                 },
-                message: `${v} is not a valid email`,
+                message: `Not a valid email`,
             },
         },
         thoughts: [
