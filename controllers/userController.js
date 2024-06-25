@@ -1,9 +1,5 @@
 const { User, Thought } = require("../models");
 
-// **`/api/users`**
-
-// * `PUT` to update a user by its `_id`
-
 // ---
 
 // **`/api/users/:userId/friends/:friendId`**
@@ -30,9 +26,7 @@ module.exports = {
         try {
             const user = await User.findOne({
                 _id: req.params.userId,
-            });
-            // not sure if it's necessary
-            // .populate(["thoughts", "friends"]);
+            }).populate(["thoughts", "friends"]);
 
             if (!user) {
                 return res
