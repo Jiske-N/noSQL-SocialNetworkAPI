@@ -17,7 +17,7 @@ const userSchema = new Schema(
                 validator: function (v) {
                     return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v);
                 },
-                message: `${v} is not a valid email`,
+                message: `Not a valid email`,
             },
         },
         thoughts: [
@@ -37,8 +37,10 @@ const userSchema = new Schema(
         toJSON: {
             // I'm not sure if we're supposed to have these as true or false
             virtuals: true,
-            getters: true,
+            // getters: true,
         },
+        // stopped an id being generated as it's input already by the post request
+        id: false,
     }
 );
 
