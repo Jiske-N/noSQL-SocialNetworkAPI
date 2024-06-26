@@ -119,7 +119,7 @@ module.exports = {
         try {
             const user = await User.findOneAndUpdate(
                 { _id: req.params.userId },
-                { $pull: { friends: friendId } },
+                { $pull: { friends: req.params.friendId } },
                 // make the updated user return rather than the original
                 { new: true }
             );
