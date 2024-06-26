@@ -1,15 +1,5 @@
 const { User, Thought } = require("../models");
 
-// ---
-
-// **`/api/users/:userId/friends/:friendId`**
-
-// * `POST` to add a new friend to a user's friend list
-
-// * `DELETE` to remove a friend from a user's friend list
-
-// ---
-
 module.exports = {
     // Get all users
     async getUsers(req, res) {
@@ -119,9 +109,7 @@ module.exports = {
         try {
             const user = await User.findOneAndUpdate(
                 { _id: req.params.userId },
-                { $pull: { friends: req.params.friendId } },
-                // make the updated user return rather than the original
-                { new: true }
+                { $pull: { friends: req.params.friendId } }
             );
 
             if (!user) {
