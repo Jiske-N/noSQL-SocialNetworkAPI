@@ -25,7 +25,7 @@ This project was designed as an API for a social network web application. It all
 ## Installation
 
 -   Clone the repository to your local machine.
--   Ensure MongoDb is installed to local machine.
+-   Ensure MongoDb is installed to local machine. Follow this [guide](https://coding-boot-camp.github.io/full-stack/mongodb/how-to-install-mongodb) if you need help.
 -   Open gitbash or similar in the root folder.
 -   Run "npm install".
 

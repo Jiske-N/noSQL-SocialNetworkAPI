@@ -59,7 +59,6 @@ const thoughtSchema = new Schema(
     },
     {
         toJSON: {
-            // I'm not sure if we're supposed to have these as true or false
             virtuals: true,
             getters: true,
         },
@@ -68,14 +67,8 @@ const thoughtSchema = new Schema(
     }
 );
 
-// // format the createdAt timestamp
-// thoughtSchema.virtual("formatCreatedAt").get(function () {
-//     return dayjs(this.createdAt).format("DD/MM/YYYY, HH:mm:ss");
-// });
-
 // create a virtual that retrieves the reactions array.length
 thoughtSchema.virtual("reactionCount").get(function () {
-    // I don't know at this stage what they want this retrieved as ie string, number etc.
     return this.reactions.length;
 });
 
