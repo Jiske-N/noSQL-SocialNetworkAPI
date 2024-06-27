@@ -1,40 +1,8 @@
-const mongoose = require("mongoose");
 const { Schema, model } = require("mongoose");
 const dayjs = require("dayjs");
-
-// schema to create the reation subdocument within the thoughtSchema below
-const reactionSchema = new Schema(
-    {
-        reactionId: {
-            type: mongoose.Types.ObjectId,
-            default: new mongoose.Types.ObjectId(),
-        },
-        reactionBody: {
-            type: String,
-            required: true,
-            maxlength: 280,
-        },
-        username: {
-            type: String,
-            required: true,
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now,
-            get: () => dayjs().format("DD/MM/YYYY, HH:mm:ss"),
-        },
-    },
-    {
-        toJSON: {
-            getters: true,
-        },
-        // stopped an id being generated as it's already defined above
-        id: false,
-    }
-);
+const reactionSchema = require("./Reaction");
 
 // schema to create the thought model
-// parent to the reactionSchema above
 const thoughtSchema = new Schema(
     {
         thoughtText: {
@@ -55,11 +23,11 @@ const thoughtSchema = new Schema(
                 required: true,
             },
         ],
+        // parent to the reactionSchema
         reactions: [reactionSchema],
     },
     {
         toJSON: {
-            // I'm not sure if we're supposed to have these as true or false
             virtuals: true,
             getters: true,
         },
@@ -68,14 +36,8 @@ const thoughtSchema = new Schema(
     }
 );
 
-// // format the createdAt timestamp
-// thoughtSchema.virtual("formatCreatedAt").get(function () {
-//     return dayjs(this.createdAt).format("DD/MM/YYYY, HH:mm:ss");
-// });
-
 // create a virtual that retrieves the reactions array.length
 thoughtSchema.virtual("reactionCount").get(function () {
-    // I don't know at this stage what they want this retrieved as ie string, number etc.
     return this.reactions.length;
 });
 

@@ -113,6 +113,7 @@ module.exports = {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $addToSet: { reactions: req.body } },
+                // make the updated thought return rather than the original
                 { new: true }
             );
 

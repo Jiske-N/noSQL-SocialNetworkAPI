@@ -35,9 +35,7 @@ const userSchema = new Schema(
     },
     {
         toJSON: {
-            // I'm not sure if we're supposed to have these as true or false
             virtuals: true,
-            // getters: true,
         },
         // stopped an id being generated as it's input already by the post request
         id: false,
@@ -46,7 +44,6 @@ const userSchema = new Schema(
 
 // create a virtual that retrieves the friends array.length
 userSchema.virtual("friendCount").get(function () {
-    // I don't know at this stage what they want this retrieved as ie string, number etc.
     return this.friends.length;
 });
 
